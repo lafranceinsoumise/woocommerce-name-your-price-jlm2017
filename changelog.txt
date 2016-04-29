@@ -1,0 +1,157 @@
+=== WooCommerce Name Your Price ===
+
+2015.12.30
+* Fix: bug in validation of subscriptions with variable billing period
+* Fix: display of front-end NYP variation price string
+* Feature: prepare appropriate disabling of ajax add to cart for NYP product in WC2.5
+
+2015.08.26 - version 2.3.3
+* Fix: compatibility of NYP Variations with WooCommerce 2.4
+
+2015.08.22 - version 2.3.2
+* Tweak: Switch add to cart $_POST to $_REQUEST globals to support defining price in URL: http://example.com?add-to-cart=99&nyp=25
+
+2015.08.06 - version 2.3.1
+* Fix: Incorrect strings in cart for subscriptions with variable billing period
+
+2015.07.30 - version 2.3.0
+* Fix: Currency formatting in error messages to match currency label position
+* Fix: endless loop with Subs 1.0+
+* Tweak: Price html strings for variable products with NYP variations
+
+2015.07.22 - version 2.2.8
+* Fix: WC2.4 compatibility for variations metaboxes
+* Fix: Subscriptions 2.0 compatibility
+* Tweak: slideUp/slideDown NYP errors instead of fadeIN/fadeOut
+
+2015.06.15 - version 2.2.7
+* Fix: Prevent infinite prices from being used
+
+2015.06.11 - version 2.2.6
+* Tweak: Better compatibility with WooCommerce Quickview
+* Tweak: Admin price html for Variable NYP products
+* New: add woocommerce_nyp_get_initial_price filter
+
+2015.04.24 - version 2.2.5
+* Fix: fatal error from WC_Subscriptions::$text_domain in admin
+
+2015.04.09 - version 2.2.4
+* Fix: accounting.JS bug on variable NYP products with comma decimals
+
+2015.03.28 - version 2.2.3
+* Fix: array to string notice for variable billing subscriptions in admin
+
+2015.03.27 - version 2.2.2
+* Fix: NYP metabox support for account funds
+
+2015.03.27 - version 2.2.1
+* Fix: Fatal error: Class 'WC_Subscriptions_Product' not found 
+
+2015.03.23 - version 2.2.0
+* Fix: Subscriptions compatibility: array to string notice for variable billing subscriptions
+
+2015.02.26 - version 2.1.1
+* Fix: JS formatting- get absolute value of any of negative prices
+
+2015.02.12 - version 2.1.0
+* IMPORTANT: Dropped support for WooCommerce 2.0
+* New: filter price input HTML
+* Fix: don't autoformat a null price. ie: empty value in the case of no suggested or minimum prices
+* Fix: add to cart text for variations now pulled from single_add_to_cart_text()
+
+2014.11.02 - version 2.0.9
+* Fix: remove jquery .focus() event because it causes issues if the input is in a widget area or otherwise below the fold
+
+2014.9.25 - version 2.0.8
+* Tweak: improved Composites support. props @franticpsyx 
+
+2014.9.25 - version 2.0.7
+* Tweak: update supported product types to include Composite's new product name
+
+2014.8.27 - version 2.0.6
+* Fix: hide minimum price on variable products with multiple NYP variations
+ 
+2014.8.4 - version 2.0.5
+* Fix: removed span tag of class = amount to prevent double amount class which doubles font size, props @splashingpixels
+* Fix: undefined POST variable array, props @splashingpixels
+
+2014.6.23 - version 2.0.4
+* Fix: display of subscription terms on subscription variations
+* Fix: variable billing period so it only works on simple subscriptions
+
+2014.5.30 - version 2.0.3
+* Fix: bug with variable subscriptions not firing WC_Name_Your_Price_Admin::save_product_variation()
+
+2014.4.25 - version 2.0.2
+* Fix: remove stray echo from display_price_input() method
+* Fix: resolve PHP notice in variable_product_sync() method
+* Tweak: minify scripts
+
+2014.02.25 - version 2.0.1
+* Fix: bug with NYP inputs displaying on variable products without NYP variations
+* Fix: bug with display variable billing checkbox without Subscriptions enabled
+* Tweak: separate registering and enqueing NYP scripts 
+* Fix: remove Product Bundles script as dependency for front-end NYP script
+* Fix: bug with NYP not loading with network activation of WooCommerce
+
+2014.01.20 - version 2.0
+* MAJOR OVERHAUL! 
+* please revisit any customizations if you were overriding any templates OR
+* if you were using the global $wc_name_your_price to disable the stylesheet (can be done from settings now) or move markup
+* New: price input template totally revamped
+* New: add support for variable and variable subscription products (requires WC 2.1)
+* New: add support for variable billing periods to simple subscriptions
+* New: add support for product bundles
+* Tweak: quick edit disabled for WC 2.0.20, but will work on simple products in 2.1
+
+2013.11.29 - version 1.2.8
+* Tweak: change $plugin_path variable to public
+
+2013.09.14 - version 1.2.7
+* New: add filters for suggested and minimum price strings
+
+2013.08.28 - version 1.2.6
+* Fix: quick edit
+
+2013.08.07 - version 1.2.5
+* Fix: Don't break Sensei products
+
+2013.06.10 - version 1.2.4
+* New: Compatibility with quick-view
+
+2013.02.26 - version 1.2.3
+* Fix: incorrect URL for quick-edit.js
+
+2013.02.26 - version 1.2.2
+* Fix: changed validation to allow for inputs with alternative decimals and thousands separators
+
+2013.01.30 - version 1.2.1
+* Fix: misspelling of is_puchasable() to is_purchasable()
+
+2013.01.27 - version 1.2
+* Fix: Remove disfunctional javascript validation
+* New: Add filters for raw minimum and suggested prices
+
+2012.12.27 - version 1.1.5
+* New: Allow zero price
+
+2012.12.27 - version 1.1.4
+* Remove tax label from price input
+
+2012.12.04 - version 1.1.3
+ * Logic error in WC detection
+
+2012.12.04 - version 1.1.2
+ * New: New updater
+ * Fix: loop price display bug
+ * Tweak: remove remove_loop_price() method, all handled via filter_suggested_price() method
+
+2012.11.26 - version 1.1.1
+ * Fix: PHP notices
+
+2012.11.05 - version 1.1
+ * Tweak: Changed hook for wider theme support
+ * New: support for subscriptions
+
+2012.08.17 - version 1.0
+ * First Release

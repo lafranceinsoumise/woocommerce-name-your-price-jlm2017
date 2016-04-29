@@ -1,0 +1,6 @@
+node_modules/
+Gruntfile.js
+package.json
+gitcreds.json
+name-your-price.sublime-project
+name-your-price.sublime-workspace
