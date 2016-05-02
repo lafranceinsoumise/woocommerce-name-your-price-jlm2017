@@ -268,6 +268,14 @@
 		$(input_tag + '[name^="' + field_to_edit + '["]' ).val( value ).change();
 	});
 
+	// set all maximum prices
+	$( 'select#field_to_edit' ).on( 'variable_maximum_price', function(){
+		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
+
+		var value = prompt(woocommerce_nyp_metabox.enter_value);
+		$(input_tag + '[name^="' + field_to_edit + '["]' ).val( value ).change();
+	});
+
 	// increase all minimum prices
 	$( 'select#field_to_edit' ).on( 'variable_minimum_price_increase', function(){
 		field_to_edit = 'variable_minimum_price';
@@ -304,5 +312,40 @@
 		});
 	});
 
+	// increase all maximum prices
+	$( 'select#field_to_edit' ).on( 'variable_maximum_price_increase', function(){
+		field_to_edit = 'variable_maximum_price';
+		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
+
+		var value = prompt(woocommerce_nyp_metabox.price_adjust);
+		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
+			var current_value = $(this).val();
+
+			if ( value.indexOf("%") >= 0 ) {
+				var new_value = Number( current_value ) + ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
+			} else {
+				var new_value = Number( current_value ) + Number ( value );
+			}
+			$(this).val( new_value ).change();
+		});
+	});
+
+	// decrease all maximum prices
+	$( 'select#field_to_edit' ).on( 'variable_maximum_price_decrease', function(){
+		field_to_edit = 'variable_maximum_price';
+		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
+
+		var value = prompt(woocommerce_nyp_metabox.price_adjust);
+		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
+			var current_value = $(this).val();
+
+			if ( value.indexOf("%") >= 0 ) {
+				var new_value = Number( current_value ) - ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
+			} else {
+				var new_value = Number( current_value ) - Number ( value );
+			}
+			$(this).val( new_value ).change();
+		});
+	});
 
 })(jQuery); //end

@@ -18,6 +18,7 @@ class WC_Name_Your_Price_Display {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( $this, 'display_price_input' ), 9 );
 		add_action( 'woocommerce_nyp_after_price_input', array( $this, 'display_minimum_price' ) );
+		add_action( 'woocommerce_nyp_after_price_input', array( $this, 'display_maximum_price' ) );
 		add_filter( 'woocommerce_product_single_add_to_cart_text', array( $this, 'single_add_to_cart_text' ), 10, 2 );
 
 		// Display NYP Prices
@@ -95,6 +96,7 @@ class WC_Name_Your_Price_Display {
 			'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting.js
 			'annual_price_factors' =>  WC_Name_Your_Price_Helpers::annual_price_factors(),
 			'minimum_error' => WC_Name_Your_Price_Helpers::error_message( 'minimum_js' ),
+			'maximum_error' => WC_Name_Your_Price_Helpers::error_message( 'maximum_js' ),
 		);
 
 		wp_localize_script( 'woocommerce-nyp', 'woocommerce_nyp_params', $params );
@@ -175,6 +177,41 @@ class WC_Name_Your_Price_Display {
 			// get the minimum price template
 			wc_get_template(
 				'single-product/minimum-price.php',
+				array( 'product_id' => $product_id ),
+				FALSE,
+				WC_Name_Your_Price()->plugin_path() . '/templates/' );
+
+		}
+
+	}
+
+	/**
+	 * Call the Maximum Price Template
+	 *
+	 * @param int $product_id
+	 * @return  void
+	 * @since 1.0
+	 */
+	public function display_maximum_price( $product_id ){
+
+		if( ! $product_id ){
+			global $product;
+			$product_id = $product->id;
+		}
+
+		// If not NYP quit right now
+		if( ! WC_Name_Your_Price_Helpers::is_nyp( $product_id ) && ! WC_Name_Your_Price_Helpers::has_nyp( $product_id ) ){
+			return;
+		}
+
+		// get the maximum price
+		$maximum = WC_Name_Your_Price_Helpers::get_maximum_price( $product_id );
+
+		if( $maximum > 0 || WC_Name_Your_Price_Helpers::has_nyp( $product_id )){
+
+			// get the maximum price template
+			wc_get_template(
+				'single-product/maximum-price.php',
 				array( 'product_id' => $product_id ),
 				FALSE,
 				WC_Name_Your_Price()->plugin_path() . '/templates/' );
@@ -360,9 +397,11 @@ class WC_Name_Your_Price_Display {
 
 		if( $is_nyp ){
 			$nyp_data['minimum_price'] = WC_Name_Your_Price_Helpers::get_minimum_price( $variation->variation_id );
+			$nyp_data['maximum_price'] = WC_Name_Your_Price_Helpers::get_maximum_price( $variation->variation_id );
 			$nyp_data['initial_price'] =  WC_Name_Your_Price_Helpers::get_price_value_attr( $variation->variation_id );
 			$nyp_data['price_html'] = '<span class="price">' . WC_Name_Your_Price_Helpers::get_suggested_price_html( $variation ) . '</span>';
 			$nyp_data['minimum_price_html'] = WC_Name_Your_Price_Helpers::get_minimum_price_html( $variation );
+			$nyp_data['maximum_price_html'] = WC_Name_Your_Price_Helpers::get_maximum_price_html( $variation );
 			$nyp_data['add_to_cart_text'] = $variation->single_add_to_cart_text();
 			if( $product->is_type( 'variable-subscription' ) ){
 				$nyp_data['subscription_terms'] = WC_Name_Your_Price_Helpers::get_subscription_terms( '', $variation );

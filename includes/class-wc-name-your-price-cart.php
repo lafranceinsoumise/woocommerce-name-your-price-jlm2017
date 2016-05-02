@@ -135,6 +135,9 @@ class WC_Name_Your_Price_Cart {
 		// get minimum price
 		$minimum = WC_Name_Your_Price_Helpers::get_minimum_price( $product_id );
 
+		// get maximum price
+		$maximum = WC_Name_Your_Price_Helpers::get_maximum_price( $product_id );
+
 		// null error message
 		$error_message = '';
 
@@ -188,6 +191,10 @@ class WC_Name_Your_Price_Cart {
 			$passed = false;
 			$minimum_error = wc_price( $minimum );
 			$error_message = WC_Name_Your_Price_Helpers::error_message( 'minimum', array( '%%TITLE%%' => $product_title, '%%MINIMUM%%' => $minimum_error ), $the_product );
+		} elseif ( $maximum && floatval( WC_Name_Your_Price_Helpers::standardize_number( $input ) ) > floatval( $maximum ) ) {
+			$passed = false;
+			$maximum_error = wc_price( $maximum );
+			$error_message = WC_Name_Your_Price_Helpers::error_message( 'maximum', array( '%%TITLE%%' => $product_title, '%%MAXIMUM%%' => $maximum_error ), $the_product );
 		}
 
 		// show the error message

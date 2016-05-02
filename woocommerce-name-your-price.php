@@ -1,15 +1,15 @@
 <?php
 /*
 Plugin Name: WooCommerce Name Your Price
-Plugin URI: http://www.woothemes.com/products/name-your-price/
-Description: WooCommerce Name Your Price allows customers to set their own price for products or donations.
-Version: 2.3.4
+Plugin URI: https://github.com/jlm2017/woocommerce-name-your-price-jlm2017
+Description: WooCommerce Name Your Price allows customers to set their own price for products or donations. (with adaptation for JLM 2017)
+Version: 2.3.4-jlm2017
 Author: Kathy Darling
 Author URI: http://kathyisawesome.com
 Requires at least: 3.8
 Tested up to: 4.2
-WC requires at least: 2.1.0    
-WC tested up to: 2.3.8   
+WC requires at least: 2.1.0
+WC tested up to: 2.3.8
 
 Copyright: © 2012 Kathy Darling.
 License: GNU General Public License v3.0

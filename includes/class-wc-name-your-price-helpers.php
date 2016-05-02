@@ -132,6 +132,25 @@ class WC_Name_Your_Price_Helpers {
 
 	}
 
+	/*
+	 * Get the maximum price
+	 *
+	 * @param int|WC_Product $product Either a product object or product's post ID.
+	 * @return 	return string
+	 * @access 	public
+	 * @since 	2.0
+	 */
+	public static function get_maximum_price( $product ){
+
+		$product_id = self::get_id( $product );
+
+		$maximum = get_post_meta( $product_id , '_max_price', true );
+
+		// filter the raw maximum price @since 1.2
+		return apply_filters ( 'woocommerce_raw_maximum_price', $maximum, $product_id );
+
+	}
+
 
 	/*
 	 * Get the minimum price for a variable product
@@ -149,6 +168,25 @@ class WC_Name_Your_Price_Helpers {
 
 		// filter the raw minimum price @since 1.2
 		return apply_filters ( 'woocommerce_raw_minimum_variation_price', $minimum, $product_id );
+
+	}
+
+	/*
+	 * Get the maximum price for a variable product
+	 *
+	 * @param int|WC_Product $product Either a product object or product's post ID.
+	 * @return 	return string
+	 * @access 	public
+	 * @since 	2.3
+	 */
+	public static function get_maximum_variation_price( $product ){
+
+		$product_id = self::get_id( $product );
+
+		$maximum = get_post_meta( $product_id , '_max_variation_price', true );
+
+		// filter the raw maximum price @since 1.2
+		return apply_filters ( 'woocommerce_raw_maximum_variation_price', $maximum, $product_id );
 
 	}
 
@@ -394,11 +432,50 @@ class WC_Name_Your_Price_Helpers {
 			$html .= sprintf( '<span class="minimum-text">%s</span><span class="amount">%s</span>', $minimum_text, $price_string );
 
 
-		} 
+		}
 
 		return apply_filters( 'woocommerce_nyp_minimum_price_html', $html, $product );
 
 	}
+
+	/*
+	 * Get the "Maximum Price: $10" minimum string
+	 *
+	 * @param obj $product ( or int $product_id )
+	 * @return 	$price string
+	 * @access 	public
+	 * @since 	2.0
+	 */
+	public static function get_maximum_price_html( $product ) {
+
+		// start the price string
+		$html = '';
+
+		// if not nyp quit early
+		if ( ! self::is_nyp( $product ) ){
+			return $html;
+		}
+
+		// get the maximum price
+		$maximum = self::get_maximum_price( $product );
+
+		if( $maximum > 0 ){
+
+			// get the maximum: text option
+			$maximum_text = stripslashes( get_option( 'woocommerce_nyp_maximum_text', __( 'Maximum Price:', 'wc_name_your_price' ) ) );
+
+			// formulate a price string
+			$price_string = self::get_price_string( $product, 'maximum' );
+
+			$html .= sprintf( '<span class="maximum-text">%s</span><span class="amount">%s</span>', $maximum_text, $price_string );
+
+
+		}
+
+		return apply_filters( 'woocommerce_nyp_maximum_price_html', $html, $product );
+
+	}
+
 
 
 	/*
@@ -473,6 +550,12 @@ class WC_Name_Your_Price_Helpers {
 				break;
 			case 'minimum':
 				$price = self::get_minimum_price( $product );
+				break;
+			case 'maximum-variation':
+				$price = self::get_maximum_variation_price( $product );
+				break;
+			case 'maximum':
+				$price = self::get_maximum_price( $product );
 				break;
 			default:
 				$price = self::get_suggested_price( $product );
@@ -752,8 +835,10 @@ class WC_Name_Your_Price_Helpers {
 
 		$price = self::get_price_value_attr( $product_id, $prefix );
 
-		$minimum = self::get_minimum_price( $product_id ); 
-		
+		$minimum = self::get_minimum_price( $product_id );
+
+		$maximum = self::get_maximum_price( $product_id );
+
 		$data_string = sprintf( 'data-price="%s"', (double) $price );
 
 		if( self::is_subscription( $product_id ) && self::is_billing_period_variable( $product_id ) ){
@@ -762,13 +847,16 @@ class WC_Name_Your_Price_Helpers {
 				$minimum_period = self::get_minimum_billing_period( $product_id );
 
 				$annualized_minimum = self::annualize_price( $minimum, $minimum_period );
+				$annualized_maximum = self::annualize_price( $maximum, $minimum_period );
 
 				$data_string .= sprintf( ' data-period="%s"', ( esc_attr( $period ) ) ? esc_attr( $period ) : 'month' );
 				$data_string .= sprintf( ' data-annual-minimum="%s"', $annualized_minimum > 0  ? (double) $annualized_minimum : 0 );
+				$data_string .= sprintf( ' data-annual-maximum="%s"', $annualized_maximum > 0  ? (double) $annualized_maximum : 0 );
 
 		} else {
 
 			$data_string .= sprintf( ' data-min-price="%s"', ( $minimum && $minimum > 0 ) ? (double) $minimum : 0 );
+			$data_string .= sprintf( ' data-max-price="%s"', ( $maximum && $maximum > 0 ) ? (double) $maximum : 0 );
 
 		}
 
@@ -906,12 +994,14 @@ class WC_Name_Your_Price_Helpers {
 	 */
 	public static function get_error_message_template( $id = null ){
 
-		$errors = apply_filters( 'woocommerce_nyp_error_message_templates', 
-			array( 
-				'invalid' => __( '&quot;%%TITLE%%&quot; could not be added to the cart: Please enter a valid, positive number.', 'wc_name_your_price' ), 
+		$errors = apply_filters( 'woocommerce_nyp_error_message_templates',
+			array(
+				'invalid' => __( '&quot;%%TITLE%%&quot; could not be added to the cart: Please enter a valid, positive number.', 'wc_name_your_price' ),
 				'minimum' => __( '&quot;%%TITLE%%&quot; could not be added to the cart: Please enter at least %%MINIMUM%%.', 'wc_name_your_price' ),
-				'minimum_js' => __( 'Please enter at least %%MINIMUM%%', 'wc_name_your_price' )
-			) 
+				'minimum_js' => __( 'Please enter at least %%MINIMUM%%', 'wc_name_your_price' ),
+				'maximum' => __( '&quot;%%TITLE%%&quot; could not be added to the cart: Please enter no more than %%MAXIMUM%%.', 'wc_name_your_price' ),
+				'maximum_js' => __( 'Please enter no more than %%MAXIMUM%%', 'wc_name_your_price' )
+			)
 		);
 
 		return isset( $errors[$id] ) ? $errors[ $id ] : '';

@@ -143,6 +143,16 @@ class WC_Name_Your_Price_Admin {
 				'data_type' => 'price'
 			) );
 
+			// Maximum Price
+			woocommerce_wp_text_input( array(
+				'id' => '_max_price',
+				'class' => 'wc_input_price short',
+				'label' => __( 'Maximum Price', 'wc_name_your_price') . ' ('.get_woocommerce_currency_symbol().')',
+				'desc_tip' => 'true',
+				'description' =>  __( 'Highest acceptable price for product. Leave blank to not enforce a maximum. Must be greater than or equal to the set suggested price.', 'wc_name_your_price' ),
+				'data_type' => 'price'
+			) );
+
 			if( class_exists( 'WC_Subscriptions' ) ) {
 				// Minimum Billing Period
 				woocommerce_wp_select( array(
@@ -190,6 +200,11 @@ class WC_Name_Your_Price_Admin {
 		if ( isset( $_POST['_min_price'] ) ) {
 			$minimum = ( trim( $_POST['_min_price'] ) === '' ) ? '' : wc_format_decimal( $_POST['_min_price'] );
 			update_post_meta( $post_id, '_min_price', $minimum );
+		}
+
+		if ( isset( $_POST['_max_price'] ) ) {
+			$maximum = ( trim( $_POST['_max_price'] ) === '' ) ? '' : wc_format_decimal( $_POST['_max_price'] );
+			update_post_meta( $post_id, '_max_price', $maximum );
 		}
 
 		// Variable Billing Periods
@@ -250,6 +265,7 @@ class WC_Name_Your_Price_Admin {
 
 		$suggested = get_post_meta( $variation->ID, '_suggested_price', true );
 		$min = get_post_meta( $variation->ID, '_min_price', true );
+		$max = get_post_meta( $variation->ID, '_max_price', true );
 
 		if( WC_Name_Your_Price_Helpers::is_woocommerce_2_3() ){ ?>
 
@@ -261,6 +277,10 @@ class WC_Name_Your_Price_Admin {
 				<p class="form-row form-row-last">
 					<label><?php echo __( 'Minimum Price:', 'wc_name_your_price' ) . ' ('.get_woocommerce_currency_symbol().')'; ?></label>
 					<input type="text" size="5" class="wc_price_input" name="variation_min_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( $min ); ?>" />
+				</p>
+				<p class="form-row form-row-last">
+					<label><?php echo __( 'Maximum Price:', 'wc_name_your_price' ) . ' ('.get_woocommerce_currency_symbol().')'; ?></label>
+					<input type="text" size="5" class="wc_price_input" name="variation_max_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( $max ); ?>" />
 				</p>
 			</div>
 
@@ -276,6 +296,10 @@ class WC_Name_Your_Price_Admin {
 				<td>
 					<label><?php echo __( 'Minimum Price:', 'wc_name_your_price' ) . ' ('.get_woocommerce_currency_symbol().')'; ?></label>
 					<input type="text" size="5" class="wc_price_input" name="variation_min_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( $min ); ?>" />
+				</td>
+				<td>
+					<label><?php echo __( 'Maximum Price:', 'wc_name_your_price' ) . ' ('.get_woocommerce_currency_symbol().')'; ?></label>
+					<input type="text" size="5" class="wc_price_input" name="variation_max_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( $max ); ?>" />
 				</td>
 			</tr>
 
@@ -309,6 +333,12 @@ class WC_Name_Your_Price_Admin {
 		if ( isset( $_POST['variation_min_price'][$i] ) ) {
 			$variation_min_price = ( trim( $_POST['variation_min_price'][$i]  ) === '' ) ? '' : wc_format_decimal( $_POST['variation_min_price'][$i] );
 			update_post_meta( $variation_id, '_min_price', $variation_min_price );
+		}
+
+		// save maximum price
+		if ( isset( $_POST['variation_max_price'][$i] ) ) {
+			$variation_max_price = ( trim( $_POST['variation_max_price'][$i]  ) === '' ) ? '' : wc_format_decimal( $_POST['variation_max_price'][$i] );
+			update_post_meta( $variation_id, '_max_price', $variation_max_price );
 		}
 
 		// remove lingering sale price if switched to nyp
@@ -366,6 +396,9 @@ class WC_Name_Your_Price_Admin {
 		<option value="variation_min_price"><?php _e( 'Minimum prices', 'wc_name_your_price' ); ?></option>
 		<option value="variation_min_price_increase"><?php _e( 'Minimum prices increase by (fixed amount or %)', 'wc_name_your_price' ); ?></option>
 		<option value="variation_min_price_decrease"><?php _e( 'Minimum prices decrease by (fixed amount or %)', 'wc_name_your_price' ); ?></option>
+		<option value="variation_max_price"><?php _e( 'Maximum prices', 'wc_name_your_price' ); ?></option>
+		<option value="variation_max_price_increase"><?php _e( 'Maximum prices increase by (fixed amount or %)', 'wc_name_your_price' ); ?></option>
+		<option value="variation_max_price_decrease"><?php _e( 'Maximum prices decrease by (fixed amount or %)', 'wc_name_your_price' ); ?></option>
 		<?php
 	}
 
@@ -440,6 +473,12 @@ class WC_Name_Your_Price_Admin {
 	    	'<p>' . __( 'This is the lowest price you are willing to accept for this product.  To not enforce a minimum (ie: to accept any price, including zero), you may leave this field blank.', 'wc_name_your_price' ) . '</p>' .
 
 	    	'<p>' . __( 'This value must be a positive number that is less than or equal to the set suggested price.', 'wc_name_your_price' ) . '</p>' .
+
+	    	'<h4>' . __( 'Maximum Price', 'wc_name_your_price' ) . '</h4>' .
+
+	    	'<p>' . __( 'This is the lowest price you are willing to accept for this product.  To not enforce a maximum (ie: to accept any price, including zero), you may leave this field blank.', 'wc_name_your_price' ) . '</p>' .
+
+	    	'<p>' . __( 'This value must be a positive number that is greater than or equal to the set suggested price.', 'wc_name_your_price' ) . '</p>' .
 
 	    	'<h4>' . __( 'Subscriptions', 'wc_name_your_price' ) . '</h4>' .
 
@@ -568,6 +607,9 @@ class WC_Name_Your_Price_Admin {
 				$min = WC_Name_Your_Price_Helpers::get_minimum_price( $post_id );
 				$min = wc_format_localized_price( $min );
 
+				$max = WC_Name_Your_Price_Helpers::get_maximum_price( $post_id );
+				$max = wc_format_localized_price( $max );
+
 				$is_nyp_allowed = has_term( array( 'simple' ), 'product_type', $post_id ) ? 'yes' : 'no';
 
 				echo '
@@ -575,6 +617,7 @@ class WC_Name_Your_Price_Admin {
 						<div class="nyp">' . $nyp . '</div>
 						<div class="suggested_price">' . $suggested . '</div>
 						<div class="min_price">' . $min . '</div>
+						<div class="max_price">' . $max . '</div>
 						<div class="is_nyp_allowed">' . $is_nyp_allowed . '</div>
 					</div>
 				';
@@ -616,6 +659,12 @@ class WC_Name_Your_Price_Admin {
 			            <span class="title"><?php _e( 'Minimum Price', 'wc_name_your_price' ); ?></span>
 			            <span class="input-text-wrap">
 			            	<input type="text" name="_min_price" class="text min_price" placeholder="<?php _e( 'Minimum price', 'wc_name_your_price' ); ?>" value="">
+			        	</span>
+			        </label>
+							<label>
+			            <span class="title"><?php _e( 'Maximum Price', 'wc_name_your_price' ); ?></span>
+			            <span class="input-text-wrap">
+			            	<input type="text" name="_max_price" class="text max_price" placeholder="<?php _e( 'Maximum price', 'wc_name_your_price' ); ?>" value="">
 			        	</span>
 			        </label>
 			    </div>
@@ -676,6 +725,11 @@ class WC_Name_Your_Price_Admin {
 		if ( isset( $_REQUEST['_min_price'] ) ) {
 			$min = ( trim( $_REQUEST['_min_price'] ) === '' ) ? '' : wc_format_decimal( $_REQUEST['_min_price'] );
 			update_post_meta( $product_id, '_min_price', $min );
+		}
+
+		if ( isset( $_REQUEST['_max_price'] ) ) {
+			$max = ( trim( $_REQUEST['_max_price'] ) === '' ) ? '' : wc_format_decimal( $_REQUEST['_max_price'] );
+			update_post_meta( $product_id, '_max_price', $max );
 		}
 
 	}

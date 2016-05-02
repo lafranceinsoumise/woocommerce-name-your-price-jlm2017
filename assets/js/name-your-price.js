@@ -39,6 +39,7 @@ jQuery( document ).ready( function($) {
 			var form_price_num 	= woocommerce_nyp_unformat_price( form_price );
 
 			var min_price 			= parseFloat( $nyp.data( 'min-price' ) );
+			var max_price 			= parseFloat( $nyp.data( 'max-price' ) );
 			var annual_minimum	= parseFloat( $nyp.data( 'annual-minimum' ) );
 
 			// get variable billing period data
@@ -69,6 +70,12 @@ jQuery( document ).ready( function($) {
 				error = min_price;
 				error_price = woocommerce_nyp_format_price( error, woocommerce_nyp_params.currency_format_symbol );
 
+			} else if ( form_price_num > max_price ) {
+
+				error = max_price;
+				error_price = woocommerce_nyp_format_price( error, woocommerce_nyp_params.currency_format_symbol );
+				error_message = woocommerce_nyp_params.maximum_error;
+
 			}
 
 			// maybe auto-format the input
@@ -84,6 +91,7 @@ jQuery( document ).ready( function($) {
 
 				// show error
 				error_message = error_message.replace( "%%MINIMUM%%", error_price );
+				error_message = error_message.replace( "%%MAXIMUM%%", error_price );
 
 				$error.html(error_message).slideDown();
 
@@ -173,6 +181,9 @@ jQuery( document ).ready( function($) {
 					// get the minimum price
 					minimum_price = variation.minimum_price;
 
+					// get the maximum price
+					maximum_price = variation.maximum_price;
+
 					// maybe auto-format the input
 					if( $.trim( initial_price ) != '' ){
 						$nyp_input.val( woocommerce_nyp_format_price( initial_price ) );
@@ -190,11 +201,20 @@ jQuery( document ).ready( function($) {
 						$minimum.hide();
 					}
 
+					// maybe show maximum price html
+					if( variation.maximum_price_html ){
+						$maximum.html ( variation.maximum_price_html ).show();
+					} else {
+						$maximum.hide();
+					}
+
 					// set the NYP data attributes for JS validation on submit
 					$nyp.data( 'min-price', minimum_price ).slideDown('200');
+					$nyp.data( 'max-price', maximum_price ).slideDown('200');
 
 					// product add ons compatibility
 					$(this).find( '#product-addons-total' ).data( 'price', minimum_price );
+					$(this).find( '#product-addons-total' ).data( 'price', maximum_price );
 					$(this).trigger( 'woocommerce-product-addons-update' );
 
 				// if not NYP, hide the price input

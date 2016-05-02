@@ -1,0 +1,361 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-02 18:20+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/single-product/price-input.php:18
+#, php-format
+msgid "%s ( %s )"
+msgstr ""
+
+#: templates/single-product/price-input.php:18
+#: includes/admin/class-name-your-price-admin.php:85
+#: includes/admin/class-name-your-price-admin.php:250
+#: includes/admin/class-name-your-price-admin.php:456
+#: includes/admin/class-name-your-price-admin.php:459
+#: includes/admin/class-name-your-price-admin.php:537
+#: includes/admin/class-name-your-price-admin.php:649
+#: includes/admin/class-wc-settings-nyp.php:25
+#: includes/admin/class-wc-settings-nyp.php:79
+msgid "Name Your Price"
+msgstr ""
+
+#: woocommerce-name-your-price.php:84 woocommerce-name-your-price.php:93
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: woocommerce-name-your-price.php:196
+#, php-format
+msgid ""
+"WooCommerce Name Your Price requires at least WooCommerce %s in order to "
+"function. Please upgrade WooCommerce."
+msgstr ""
+
+#: woocommerce-name-your-price.php:228
+msgid "Go to the settings page"
+msgstr ""
+
+#: woocommerce-name-your-price.php:228
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:86
+#: includes/admin/class-name-your-price-admin.php:250
+msgid "Customers are allowed to determine their own price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:111
+msgid "Variable Billing Period"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:112
+msgid "Allow the customer to set the billing period."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:119
+#: includes/admin/class-name-your-price-admin.php:465
+#: includes/admin/class-name-your-price-admin.php:653
+#: includes/admin/class-name-your-price-admin.php:655
+msgid "Suggested Price"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:121
+msgid "Price to pre-fill for customers.  Leave blank to not suggest a price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:130
+#: includes/admin/class-name-your-price-admin.php:160
+msgid "per"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:140
+#: includes/admin/class-name-your-price-admin.php:471
+#: includes/admin/class-name-your-price-admin.php:659
+msgid "Minimum Price"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:142
+msgid ""
+"Lowest acceptable price for product. Leave blank to not enforce a minimum. "
+"Must be less than or equal to the set suggested price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:150
+#: includes/admin/class-name-your-price-admin.php:477
+#: includes/admin/class-name-your-price-admin.php:665
+msgid "Maximum Price"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:152
+msgid ""
+"Highest acceptable price for product. Leave blank to not enforce a maximum. "
+"Must be greater than or equal to the set suggested price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:274
+#: includes/admin/class-name-your-price-admin.php:293
+#: includes/admin/class-wc-settings-nyp.php:49
+#: includes/class-wc-name-your-price-helpers.php:505
+msgid "Suggested Price:"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:278
+#: includes/admin/class-name-your-price-admin.php:297
+#: includes/admin/class-wc-settings-nyp.php:59
+#: includes/class-wc-name-your-price-helpers.php:427
+msgid "Minimum Price:"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:282
+#: includes/admin/class-name-your-price-admin.php:301
+#: includes/admin/class-wc-settings-nyp.php:69
+#: includes/class-wc-name-your-price-helpers.php:465
+msgid "Maximum Price:"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:392
+msgid "Toggle &quot;Name Your Price&quot;"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:393
+msgid "Suggested prices"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:394
+msgid "Suggested prices increase by (fixed amount or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:395
+msgid "Suggested prices decrease by (fixed amount or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:396
+msgid "Minimum prices"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:397
+msgid "Minimum prices increase by (fixed amount or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:398
+msgid "Minimum prices decrease by (fixed amount or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:399
+msgid "Maximum prices"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:400
+msgid "Maximum prices increase by (fixed amount or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:401
+msgid "Maximum prices decrease by (fixed amount or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:431
+msgid "Enter a value"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:432
+msgid "Enter a value (fixed or %)"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:461
+msgid ""
+"In the \"Product Meta\" metabox, check the Name Your Price checkbox to allow "
+"your customers to enter their own price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:463
+msgid ""
+"As of Name Your Price version 2.0, this ability is available for \"Simple\", "
+"\"Subscription\", \"Bundled\", \"Variable\" and \"Variable Subscriptions\" "
+"Products."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:467
+msgid ""
+"This is the price you'd like to suggest to your customers.  The Name Your "
+"Price input will be prefilled with this value.  To not suggest a price at "
+"all, you may leave this field blank."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:469
+msgid "This value must be a positive number."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:473
+msgid ""
+"This is the lowest price you are willing to accept for this product.  To not "
+"enforce a minimum (ie: to accept any price, including zero), you may leave "
+"this field blank."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:475
+msgid ""
+"This value must be a positive number that is less than or equal to the set "
+"suggested price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:479
+msgid ""
+"This is the lowest price you are willing to accept for this product.  To not "
+"enforce a maximum (ie: to accept any price, including zero), you may leave "
+"this field blank."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:481
+msgid ""
+"This value must be a positive number that is greater than or equal to the "
+"set suggested price."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:483
+msgid "Subscriptions"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:485
+msgid ""
+"If you have a name your price subscription product, the subscription time "
+"period fields are still needed, but the price will be disabled in lieu of "
+"the Name Your Price suggested and minimum prices."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:487
+msgid ""
+"As of Name Your Price version 2.0, you can now allow variable billing "
+"periods."
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:661
+msgid "Minimum price"
+msgstr ""
+
+#: includes/admin/class-name-your-price-admin.php:667
+msgid "Maximum price"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:41
+msgid "Name Your Price Setup"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:41
+msgid "Modify the text strings used by the Name Your Own Price extension."
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:44
+msgid "Suggested Price Text"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:45
+msgid "This is the text to display before the suggested price."
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:54
+msgid "Minimum Price Text"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:55
+#: includes/admin/class-wc-settings-nyp.php:65
+msgid "This is the text to display before the minimum accepted price."
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:64
+msgid "Maximum Price Text"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:74
+msgid "Name Your Price Text"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:75
+msgid "This is the text that appears above the Name Your Price input field."
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:84
+msgid "Add to Cart Button Text for Shop"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:85
+msgid ""
+"This is the text that appears on the Add to Cart buttons on the Shop Pages."
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:89
+#: includes/class-wc-name-your-price-display.php:288
+msgid "Set Price"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:94
+msgid "Add to Cart Button Text for Single Product"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:95
+msgid ""
+"This is the text that appears on the Add to Cart buttons on the Single "
+"Product Pages."
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:99
+#: includes/class-wc-name-your-price-display.php:237
+msgid "Add to Cart"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:105
+msgid "Name Your Price Style"
+msgstr ""
+
+#: includes/admin/class-wc-settings-nyp.php:108
+msgid "Disable Name Your Price Stylesheet"
+msgstr ""
+
+#: includes/class-wc-name-your-price-helpers.php:578
+#, php-format
+msgid " %s / %s"
+msgstr ""
+
+#: includes/class-wc-name-your-price-helpers.php:999
+#, php-format
+msgid ""
+"&quot;%%TITLE%%&quot; could not be added to the cart: Please enter a valid, "
+"positive number."
+msgstr ""
+
+#: includes/class-wc-name-your-price-helpers.php:1000
+#, php-format
+msgid ""
+"&quot;%%TITLE%%&quot; could not be added to the cart: Please enter at least "
+"%%MINIMUM%%."
+msgstr ""
+
+#: includes/class-wc-name-your-price-helpers.php:1001
+#, php-format
+msgid "Please enter at least %%MINIMUM%%"
+msgstr ""
+
+#: includes/class-wc-name-your-price-helpers.php:1002
+#, php-format
+msgid ""
+"&quot;%%TITLE%%&quot; could not be added to the cart: Please enter no more "
+"than %%MAXIMUM%%."
+msgstr ""
+
+#: includes/class-wc-name-your-price-helpers.php:1003
+#, php-format
+msgid "Please enter no more than %%MAXIMUM%%"
+msgstr ""
