@@ -1,0 +1,22 @@
+{
+  "name": "jlm2017/woocommerce-name-your-price",
+  "type": "wordpress-plugin",
+  "keywords": ["wordpress", "plugin"],
+  "require": {
+    "php": ">=5.3.2",
+    "composer/installers": "~1.0"
+  },
+  "homepage": "https://github.com/jlm2017/woocommerce-name-your-price-jlm2017",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Guillaume Royer",
+      "email": "perso@guilro.com",
+      "homepage": "https://blog.guilro.com"
+    },
+    {
+      "name": "Kathy Darling",
+      "homepage": "http://kathyisawesome.com"
+    }
+  ]
+}
