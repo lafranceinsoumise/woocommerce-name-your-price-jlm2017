@@ -39,7 +39,6 @@ jQuery( document ).ready( function($) {
 			var form_price_num 	= woocommerce_nyp_unformat_price( form_price );
 
 			var min_price 			= parseFloat( $nyp.data( 'min-price' ) );
-			var max_price 			= parseFloat( $nyp.data( 'max-price' ) );
 			var annual_minimum	= parseFloat( $nyp.data( 'annual-minimum' ) );
 
 			// get variable billing period data
@@ -60,7 +59,7 @@ jQuery( document ).ready( function($) {
 					// in the case of variable period we need to adjust the error message a bit
 					error_price = woocommerce_nyp_format_price( error, woocommerce_nyp_params.currency_format_symbol ) + ' / ' + $nyp_period.find('option[value="' + form_period + '"]').text();
 
-					
+
 				}
 
 			// otherwise a regular product or subscription with non-variable periods
@@ -69,12 +68,6 @@ jQuery( document ).ready( function($) {
 
 				error = min_price;
 				error_price = woocommerce_nyp_format_price( error, woocommerce_nyp_params.currency_format_symbol );
-
-			} else if ( form_price_num > max_price ) {
-
-				error = max_price;
-				error_price = woocommerce_nyp_format_price( error, woocommerce_nyp_params.currency_format_symbol );
-				error_message = woocommerce_nyp_params.maximum_error;
 
 			}
 
@@ -87,11 +80,10 @@ jQuery( document ).ready( function($) {
 			if ( error ){
 
 				// disable submit
-				$nyp.data( 'submit', false );
+				$submit.prop( 'disabled', true );
 
 				// show error
 				error_message = error_message.replace( "%%MINIMUM%%", error_price );
-				error_message = error_message.replace( "%%MAXIMUM%%", error_price );
 
 				$error.html(error_message).slideDown();
 
@@ -102,7 +94,7 @@ jQuery( document ).ready( function($) {
 			} else {
 
 				// allow submit
-				$nyp.data( 'submit', true );
+				$submit.prop( 'disabled', false );
 
 				// remove error
 				$error.slideUp();
@@ -126,18 +118,6 @@ jQuery( document ).ready( function($) {
 			$cart.trigger( 'woocommerce-nyp-update' );
 		} );
 
-		// add to cart on submit, don't submit if minimum wasn't valid
-		$( this ).closest( 'form' ).on( 'submit', function() {
-
-			// if submit is not allowed, don't submit
-			if ( $(this).find( '.nyp' ).data( 'submit' ) === false ){
-				event.preventDefault();
-				//re-enable submit
-				$(this).find( ':submit' ).removeAttr( 'disabled' );
-			}
-
-		} );
-
 		// trigger right away
 		$( this ).find( 'input.nyp-input' ).trigger( 'change' );
 
@@ -157,7 +137,7 @@ jQuery( document ).ready( function($) {
 
 			// the add to cart text
 			var default_add_to_cart_text 	= $add_to_cart.html();
-			
+
 			// hide the nyp form by default
 			$nyp.hide();
 			$minimum.hide();
@@ -175,18 +155,22 @@ jQuery( document ).ready( function($) {
 					// switch add to cart button text if variation is NYP
 					$add_to_cart.html( variation.add_to_cart_text );
 
+					// get the posted value out of data attributes
+					posted_price = variation.posted_price;
+
 					// get the initial value out of data attributes
 					initial_price = variation.initial_price;
 
 					// get the minimum price
 					minimum_price = variation.minimum_price;
 
-					// get the maximum price
-					maximum_price = variation.maximum_price;
-
 					// maybe auto-format the input
-					if( $.trim( initial_price ) != '' ){
+					if( $.trim( posted_price ) != '' ){
+						$nyp_input.val( woocommerce_nyp_format_price( posted_price ) );
+					} else if( $.trim( initial_price ) != '' ){
 						$nyp_input.val( woocommerce_nyp_format_price( initial_price ) );
+					} else {
+						$nyp_input.val( '' );
 					}
 
 					// maybe show subscription terms
@@ -201,20 +185,11 @@ jQuery( document ).ready( function($) {
 						$minimum.hide();
 					}
 
-					// maybe show maximum price html
-					if( variation.maximum_price_html ){
-						$maximum.html ( variation.maximum_price_html ).show();
-					} else {
-						$maximum.hide();
-					}
-
 					// set the NYP data attributes for JS validation on submit
 					$nyp.data( 'min-price', minimum_price ).slideDown('200');
-					$nyp.data( 'max-price', maximum_price ).slideDown('200');
 
 					// product add ons compatibility
 					$(this).find( '#product-addons-total' ).data( 'price', minimum_price );
-					$(this).find( '#product-addons-total' ).data( 'price', maximum_price );
 					$(this).trigger( 'woocommerce-product-addons-update' );
 
 				// if not NYP, hide the price input
@@ -232,15 +207,17 @@ jQuery( document ).ready( function($) {
 
 			.on( 'reset_image', function( event ) {
 
-				$add_to_cart.html(default_add_to_cart_text);
+				$add_to_cart.html( default_add_to_cart_text );
 				$nyp.slideUp('200');
+
 			} )
 
 			// hide the price input when reset is clicked
 			.on( 'click', '.reset_variations', function( event ) {
 
-				$add_to_cart.html(default_add_to_cart_text);
+				$add_to_cart.html( default_add_to_cart_text );
 				$nyp.slideUp( '200' );
+
 			} );
 
 
@@ -255,7 +232,7 @@ jQuery( document ).ready( function($) {
 	 * run when Quick view item is launched
 	 */
 	$( 'body' ).on( 'quick-view-displayed', function() {
-		$( 'body' ).find( '.cart' ).each( function() {
+		$( 'body' ).find( '.cart:not(.cart_group)' ).each( function() {
 			$( this ).woocommerce_nyp_update();
 		} );
 	} );
@@ -264,7 +241,7 @@ jQuery( document ).ready( function($) {
 	 * run when a Composite component is re-loaded
 	 */
 	$( 'body .component' ).on( 'wc-composite-component-loaded', function() {
-		$( this ).find( '.cart' ).each( function() {
+		$( this ).find( '.cart:not(.cart_group)' ).each( function() {
 			$( this ).woocommerce_nyp_update();
 		} );
 	} );
@@ -272,7 +249,7 @@ jQuery( document ).ready( function($) {
 	/*
 	 * run on load
 	 */
-	$( 'body' ).find( '.cart' ).each( function() {
+	$( 'body' ).find( '.cart:not(.cart_group)' ).each( function() {
 		$( this ).woocommerce_nyp_update();
 	} );
 
@@ -290,7 +267,7 @@ jQuery( document ).ready( function($) {
 				decimal : woocommerce_nyp_params.currency_format_decimal_sep,
 				thousand: woocommerce_nyp_params.currency_format_thousand_sep,
 				precision : woocommerce_nyp_params.currency_format_num_decimals,
-				format: woocommerce_nyp_params.currency_format	
+				format: woocommerce_nyp_params.currency_format
 		}).trim();
 
 	}

@@ -1,40 +1,46 @@
 <?php
 /*
-Plugin Name: WooCommerce Name Your Price
-Plugin URI: https://github.com/jlm2017/woocommerce-name-your-price-jlm2017
-Description: WooCommerce Name Your Price allows customers to set their own price for products or donations. (with adaptation for JLM 2017)
-Version: 2.3.4-jlm2017
-Author: Kathy Darling
-Author URI: http://kathyisawesome.com
-Requires at least: 3.8
-Tested up to: 4.2
-WC requires at least: 2.1.0
-WC tested up to: 2.3.8
-
-Copyright: © 2012 Kathy Darling.
-License: GNU General Public License v3.0
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
-
-*/
-
-/**
- * Required functions
+ * Plugin Name: WooCommerce Name Your Price
+ * Plugin URI: http://www.woothemes.com/products/name-your-price/
+ * Description: WooCommerce Name Your Price allows customers to set their own price for products or donations.
+ * Version: 2.6.0
+ * Author: Kathy Darling
+ * Author URI: http://kathyisawesome.com
+ * Woo: 18738:31b4e11696cd99a3c0572975a84f1c08
+ * Requires at least: 3.8
+ * Tested up to: 4.7.3
+ * WC requires at least: 2.4.0    
+ * WC tested up to: 3.0.0   
+ *
+ * Text Domain: wc_name_your_price
+ * Domain Path: /languages/
+ *
+ * Copyright: © 2012 Kathy Darling.
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ *
  */
-if ( ! function_exists( 'woothemes_queue_update' ) )
-	require_once( 'woo-includes/woo-functions.php' );
 
 /**
- * Plugin updates
+ * Required functions.
+ */
+if ( ! function_exists( 'woothemes_queue_update' ) ){
+	require_once( 'woo-includes/woo-functions.php' );
+}
+
+/**
+ * Plugin updates.
  */
 woothemes_queue_update( plugin_basename( __FILE__ ), '31b4e11696cd99a3c0572975a84f1c08', '18738' );
 
 // Quit right now if WooCommerce is not active
-if ( ! is_woocommerce_active() )
+if ( ! is_woocommerce_active() ){
 	return;
+}
 
 
 /**
- * The Main WC_Name_Your_Price class
+ * The Main WC_Name_Your_Price class.
  **/
 if ( ! class_exists( 'WC_Name_Your_Price' ) ) :
 
@@ -50,16 +56,16 @@ class WC_Name_Your_Price {
 	 * @var plugin version
 	 * @since 2.0
 	 */
-	public $version = '2.3.4';   
+	public $version = '2.6.0';   
 
 	/**
 	 * @var required WooCommerce version
 	 * @since 2.1
 	 */
-	public $required_woo = '2.1.0';
+	public $required_woo = '2.4.0';
 
 	/**
-	 * Main WC_Name_Your_Price Instance
+	 * Main WC_Name_Your_Price Instance.
 	 *
 	 * Ensures only one instance of WC_Name_Your_Price is loaded or can be loaded.
 	 *
@@ -81,7 +87,7 @@ class WC_Name_Your_Price {
 	 * @since 2.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), 'wc_name_your_price' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wc_name_your_price' ) );
 	}
 
 	/**
@@ -90,11 +96,11 @@ class WC_Name_Your_Price {
 	 * @since 2.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), 'wc_name_your_price' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wc_name_your_price' ) );
 	}
   
 	/**
-	 * WC_Name_Your_Price Constructor
+	 * WC_Name_Your_Price Constructor.
 	 *
 	 * @access public
      * @return WC_Name_Your_Price
@@ -150,18 +156,25 @@ class WC_Name_Your_Price {
 	 */
 	public function includes(){
 
+		// Include WC compatibility functions
+		include_once( 'includes/class-wc-name-your-price-core-compatibility.php' );
+
 		// check we're running the required version of WC
-		if ( ! defined( 'WC_VERSION' ) || version_compare( WC_VERSION, $this->required_woo, '<' ) ) {
+		if ( ! WC_Name_Your_Price_Core_Compatibility::is_wc_version_gte( $this->required_woo ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice' ) );
 			return false;
 		}
 
 		// include all helper functions
-		include_once( 'includes/class-wc-name-your-price-helpers.php' );
+		if( WC_Name_Your_Price_Core_Compatibility::is_wc_version_gte( '3.0.0' ) ) {
+			include_once( 'includes/class-wc-name-your-price-helpers.php' );
+		} else {
+			include_once( 'includes/legacy/class-wc-name-your-price-helpers.php' );
+		}
 
 		// include admin class to handle all backend functions
 		if( is_admin() ){
-			include_once( 'includes/admin/class-name-your-price-admin.php' );
+			$this->admin_includes();
 		}
 
 		// include the front-end functions
@@ -172,17 +185,18 @@ class WC_Name_Your_Price {
 			include_once( 'includes/class-wc-name-your-price-cart.php' );
 			$this->cart = new WC_Name_Your_Price_Cart();
 
+			include_once( 'includes/class-wc-name-your-price-order.php' );
+			$this->order = new WC_Name_Your_Price_Order();
+
 		}
 
 		include_once( 'includes/class-wc-name-your-price-compatibility.php' );
 		$this->compatibility = new WC_Name_Your_Price_Compatibility();
 
-		// minor backcompat issues
-		if ( WC_Name_Your_Price_Helpers::is_woocommerce_2_3() ) {
-			include_once( 'includes/wc-23-functions.php' );
-		} else {
-			include_once( 'includes/wc-21-functions.php' );
-		}
+		// Include deprecated functions.
+		include_once( 'includes/wc-nyp-deprecated-functions.php' );
+
+		do_action( 'wc_name_your_price_loaded' );
 
 	}
 
@@ -193,7 +207,21 @@ class WC_Name_Your_Price {
 	 * @since  2.1
 	 */
 	public function admin_notice() {
-	    echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Name Your Price requires at least WooCommerce %s in order to function. Please upgrade WooCommerce.', 'woocommerce-mix-and-match-products' ), $this->required_woo ) . '</p></div>';
+	    echo '<div class="error"><p>' . sprintf( __( 'WooCommerce Name Your Price requires at least WooCommerce %s in order to function. Please upgrade WooCommerce.', 'wc_name_your_price' ), $this->required_woo ) . '</p></div>';
+	}
+
+
+	/**
+	 * Load the admin files.
+	 * @return void
+	 * @since  2.2
+	 */
+	public function admin_includes() {
+	    if ( WC_Name_Your_Price_Core_Compatibility::is_wc_version_gte( '3.0.0' ) ) {
+			include_once( 'includes/admin/class-name-your-price-admin.php' );
+		} else {
+			include_once( 'includes/admin/legacy/class-name-your-price-admin-legacy.php' );
+		}
 	}
 
 
@@ -203,13 +231,25 @@ class WC_Name_Your_Price {
 
 
 	/**
-	 * Make the plugin translation ready
+	 * Load Localisation files.
+	 *
+	 * Note: the first-loaded translation file overrides any following ones if the same translation is present.
+	 *
+	 * Locales found in:
+	 *      - WP_LANG_DIR/wc_name_your_price/wc_name_your_price-LOCALE.mo
+	 *      - WP_LANG_DIR/plugins/wc_name_your_price-LOCALE.mo
+	 *      - WP_CONTENT_DIR/plugins/woocommerce-name-your-price/languages/wc_name_your_price-LOCALE.mo
 	 *
 	 * @return void
 	 * @since  1.0
 	 */
 	public function load_plugin_textdomain() {
-		load_plugin_textdomain( 'wc_name_your_price' , false , dirname( plugin_basename( __FILE__ ) ) .  '/languages/' );
+		// Traditional WordPress plugin locale filter
+		$locale        = apply_filters( 'plugin_locale',  get_locale(), 'wc_name_your_price' );
+
+		load_textdomain( 'wc_name_your_price', WP_LANG_DIR . '/wc_name_your_price/wc_name_your_price-' . $locale . '.mo' );
+		load_plugin_textdomain( 'wc_name_your_price', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
+
 	}
 
 	/*-----------------------------------------------------------------------------------*/
@@ -223,9 +263,8 @@ class WC_Name_Your_Price {
 	 * @return array
 	 * @since 1.0
 	 */
-
 	public function add_action_link( $links ) {
-		$settings_link = '<a href="'.admin_url('admin.php?page=wc-settings&tab=nyp').'" title="'.__('Go to the settings page', 'wc_name_your_price').'">'.__( 'Settings', 'wc_name_your_price' ).'</a>';
+		$settings_link = '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=nyp' ). '" title="' . __( 'Go to the settings page', 'wc_name_your_price' ). '">'.__( 'Settings', 'wc_name_your_price' ).'</a>';
 		return array_merge( (array) $settings_link, $links );
 
 	}
@@ -236,7 +275,7 @@ class WC_Name_Your_Price {
 	/*-----------------------------------------------------------------------------------*/
 
 	/**
-	 * display_minimum_price function
+	 * display_minimum_price function.
 	 *
 	 * @deprecated As of 2.0, function is now in display class and global replaced with instance
 	 * @access public
@@ -247,7 +286,7 @@ class WC_Name_Your_Price {
 	}
 
 	/**
-	 * display_price_input function
+	 * display_price_input function.
 	 *
 	 * @deprecated As of 2.0, function is now in display class and global replaced with instance
 	 * @access public
@@ -258,7 +297,7 @@ class WC_Name_Your_Price {
 	}
 
 	/**
-	 * nyp_style function
+	 * nyp_style function.
 	 *
 	 * @deprecated As of 2.0, function is now in display class and global replaced with instance
 	 * @access public
@@ -283,5 +322,5 @@ function WC_Name_Your_Price() {
   return WC_Name_Your_Price::instance();
 }
 
-// Launch the whole plugin w/ a little backcompat
+// Launch the whole plugin w/ a little backcompat.
 $GLOBALS['wc_name_your_price'] = WC_Name_Your_Price();

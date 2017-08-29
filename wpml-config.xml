@@ -1,0 +1,15 @@
+<wpml-config>   
+    <admin-texts>
+        <key name="woocommerce_nyp_suggested_text" />
+        <key name="woocommerce_nyp_minimum_text" />
+        <key name="woocommerce_nyp_label_text" />
+        <key name="woocommerce_nyp_button_text" />
+        <key name="woocommerce_nyp_button_text_single" />
+    </admin-texts>  
+    <custom-fields>
+        <custom-field action="copy">_has_nyp</custom-field>
+        <custom-field action="copy">_nyp</custom-field>
+        <custom-field action="copy">_suggested_price</custom-field>
+        <custom-field action="copy">_min_price</custom-field>
+    </custom-fields>
+</wpml-config>

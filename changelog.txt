@@ -1,6 +1,55 @@
 === WooCommerce Name Your Price ===
 
-2015.12.30
+2017.08.01 - version 2.6.0
+* New: Add support for WPML
+* New: Add support for new WooCommerce.com updates
+* New: Switch front-end validation to add disabled attribute to add to cart button
+* Fix: PHP notice on WC setup with NYP installed 
+* Fix: Update deprecated Subscriptions method
+
+2017.05.04 - version 2.5.5
+* Fix: Only bulk edit variations that are NYP-enabled
+
+2017.04.26 - version 2.5.4
+* Fix: Fatal error in variation bulk edit
+* Fix: Bug that caused variable subscriptions to not show price string
+
+2017.04.19 - version 2.5.3
+* Fix: Missing settings in WooCommerce 2.6.x
+
+2017.04.14 - version 2.5.2
+* Fix: Add load_textdomain() support for files to be placed in WP_LANG_DIR/wc_name_your_price/wc_name_your_price-LOCALE.mo
+* Fix: Fatal error with Subscriptions and variable billing periods
+* Fix: Compatibility with One Page Checkout product template
+
+2017.04.07 - version 2.5.1
+* Fix: Variable product sync of _has_nyp status. Restores NYP input for variable products with WC3.0.  
+* Fix: Switch variable product price string to "From: $9.99" or a null string if lowest-costing variation is NYP with no minimum.
+* Fix: Handling of thousands separator. 
+
+2017.04.03 - version 2.5.0
+* Important - WooCommerce 3.0 support added.
+* Important - WooCommerce 2.3 support dropped.
+
+2016.10.17 - version 2.4.2
+* New: JS support multiple NYP inputs
+* Fix: bulk toggle NYP on/off for variations
+
+2016.08.03 - version 2.4.1
+* Fix: Update version number in main plugin file
+
+2016.08.02 - version 2.4.0
+* New: Add support for order again, fixes loss of NYP price on order again, and payment for pending orders
+* New: Add filter for woocommerce_variable_subscription_price_html (will work better when Subscriptions changes how they save variations)
+* Fix: Better price strings for Variable products with NYP variations. Products with no minimum will no longer say From: $0 unless 0 is explicity defined as minimum
+* Fix: bulk variation actions
+* Deprecated: Variable billing periods. Existing products will continue to work, but new instances are disabled. Please switch to variable subscriptions instead. 
+* Fix: support CHF thousands seperator (')
+
+2016.05.03 - version 2.3.5
+* New: add wc_name_your_price_loaded hook for extending NYP
+
+2015.12.30 - version 2.3.4
 * Fix: bug in validation of subscriptions with variable billing period
 * Fix: display of front-end NYP variation price string
 * Feature: prepare appropriate disabling of ajax add to cart for NYP product in WC2.5

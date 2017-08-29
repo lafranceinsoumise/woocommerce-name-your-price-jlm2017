@@ -1,13 +1,13 @@
 # WooCommerce Name Your Price #
 
-**Contributors:** Kathy Darling      
+**Contributors:** [Kathy Darling](https://profiles.wordpress.org/Kathy Darling)  
 **Requires at least:** 3.8      
-**Tested up to:** 4.2      
-**Stable tag:** 2.3.4
+**Tested up to:** 4.6.1      
+**Stable tag:** 2.6.0  
 **License:** GPLv3      
 **License URI:** http://www.gnu.org/licenses/gpl-3.0.html      
 **WC requires at least:** 2.1.0      
-**WC tested up to:** 2.3.8      
+**WC tested up to:** 2.6.4      
 
 Allow customers to set their own prices for WooCommerce products
 
@@ -18,7 +18,7 @@ WooCommerce 2.0 is no longer supported. Do not upgrade unless you are using at l
 
 The WooCommerce Name Your Price extension lets you be flexible in what price you are willing to accept for selected products. You can use this extension to accept user-determined donations, gather pricing data or to take a new approach to selling products!  You can *suggest* a price to your customers and optionally enforce a minimum acceptable price, but otherwise this extension allows the customer to enter the price he's willing to pay.
 
-[screenshot1.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot1.png]
 
 ## Installation ##
 
@@ -42,13 +42,13 @@ Name Your Price will continue to work with WooCommerce 2.0.20, but WooCommerce 2
 
 Name Your Price has several strings that can be modified from the plugin's settings. Go to WooCommerce->Settings and and click on the Name Your Price tab. From here you can modify the add to cart button texts, the minimum, "From:" and suggested text strings. 
 
-[screenshot3.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot3.png]
 
 ## How to Use ##
 
 ### How to Use With Simple Products ###
 
-[screenshot2.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot2.png]
 
 To enable flexible, user-determined pricing on any simple product:
 
@@ -70,21 +70,21 @@ To enable flexible, user-determined pricing on any simple product:
 
 Subscription products work similarly to simple products. If you check the Name Your Price box, the subscription price box will be disabled in favor the suggested and minimum price inputs. The subscription billing period inputs remain unchanged. 
 
-[screenshot4.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot4.png]
 
 As of Name Your Price 2.0, you can now also offer a variable billing period, which allows the customer to decide if she'd like to pay per month or per day, etc. To enable this, you need to check the "Variable Billing Period" checkbox. With this checked, if you enter suggested or minimum prices, you must select a corresponding suggested or minimum billing period. 
 
-[screenshot5.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot5.png]
 
 ### How to Use With Variable Products ###
 
 As of Name Your Price 2.0, you can now have name your price variations on variable or variable Subscriptions products. Within each variation look for a "Name Your Price" checkbox and follow the same rules as simple products for suggested and minimum prices for each variation.
 
-[screenshot6.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot6.png]
 
 On the front-end when a Name Your Price variation is selected, the Name Your Price price input will appear. 
 
-[screenshot7.png]
+[https://raw.githubusercontent.com/woothemes/woocommerce-name-your-price/master/screenshots/screenshot7.png]
 
 ## FAQ ##
 

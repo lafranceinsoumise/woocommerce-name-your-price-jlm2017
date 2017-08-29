@@ -61,16 +61,6 @@ class WC_Settings_NYP extends WC_Settings_Page {
 			),
 
 			array(
-				'title' => __( 'Maximum Price Text', 'wc_name_your_price' ),
-				'desc' 		=> __( 'This is the text to display before the minimum accepted price.', 'wc_name_your_price' ),
-				'id' 		=> 'woocommerce_nyp_maximum_text',
-				'type' 		=> 'text',
-				'css' 		=> 'min-width:300px;',
-				'default'	=> _x( 'Maximum Price:', 'maximum price', 'wc_name_your_price' ),
-				'desc_tip'	=>  true,
-			),
-
-			array(
 				'title' => __( 'Name Your Price Text', 'wc_name_your_price' ),
 				'desc' 		=> __( 'This is the text that appears above the Name Your Price input field.', 'wc_name_your_price' ),
 				'id' 		=> 'woocommerce_nyp_label_text',

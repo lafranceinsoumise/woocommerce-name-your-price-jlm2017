@@ -16,7 +16,7 @@
 		},
 		showHideNYPelements: function(){
 			var product_type = $( 'select#product-type' ).val();
-			var is_nyp = $( '#_nyp:checked' ).size();
+			var is_nyp = $( '#_nyp' ).prop( 'checked' );
 
 			$.toggleRegularPriceClass( is_nyp );
 
@@ -24,7 +24,7 @@
 				case 'subscription' :
 						$.showHideNYPprices( is_nyp, true );
 						$.enableDisableSubscriptionPrice( is_nyp );
-						var is_variable_billing = $( '#_variable_billing:checked' ).size();
+						var is_variable_billing = $( '#_variable_billing' ).prop( 'checked' );
 						$.showHideNYPvariablePeriods( is_variable_billing );
 						$.enableDisableSubscriptionPeriod( is_variable_billing );
 					break;
@@ -53,7 +53,7 @@
 			}
 		},
 		showHideNYPprices: function( show, restore ) {
-			// for simple and sub types we'll want to restore the regular price inputs
+			// For simple and sub types we'll want to restore the regular price inputs.
 			restore = typeof restore !== 'undefined' ? restore : false;
 
 			if ( show ) {
@@ -111,8 +111,8 @@
 
 				var $nyp_pricing = $(this).closest( '.woocommerce_variation' ).find( '.variable_nyp_pricing' );
 
-				// hide or display on load
-				if ( $(this).is( ':checked' ) ) {
+				// Hide or display on load.
+				if ( $(this).prop( 'checked' ) ) {
 					$nyp_pricing.show();
 					$variable_pricing.hide();
 
@@ -133,7 +133,7 @@
 
 				var $nyp_pricing = $(this).closest( '.woocommerce_variation' ).find( '.variable_nyp_pricing' );
 
-				if ( $(this).is( ':checked' ) ) {
+				if ( $(this).prop( 'checked' ) ) {
 					$nyp_pricing.show();
 					$variable_subscription_price.prop( 'disabled', true ).css( 'background','#CCC' );
 					$variable_pricing.children().not( '.show_if_variable-subscription' ).hide();
@@ -145,61 +145,75 @@
 
 			});
 
+		}, 
+		getNYPVariationBulkEditValue: function( variation_action ){
+			var value;
+
+			switch( variation_action ) {
+				case 'variation_suggested_price':
+				case 'variation_minimum_price':
+					value = window.prompt( woocommerce_nyp_metabox.enter_value );
+					value = accounting.unformat( value, woocommerce_admin.mon_decimal_point );
+					break;
+				case 'variation_suggested_price_increase':
+				case 'variation_min_price_increase':
+					value = window.prompt( woocommerce_nyp_metabox.price_adjust );
+					break;
+				case 'variation_suggested_price_increase':
+				case 'variation_min_price_increase':
+					value = window.prompt( woocommerce_nyp_metabox.price_adjust );
+					break;
+			}
+			return value;
 		}
+
 	} ); //end extend
 
 
-	// magically move the simple inputs into the sample location as the normal pricing section
+	// Magically move the simple inputs into the sample location as the normal pricing section.
 	if( $( '.options_group.pricing' ).length > 0) {
 		$.moveNYPmetaFields();
 		$.addClasstoRegularPrice();
 		$.showHideNYPelements();
 	}
 
-	// adjust fields when the product type is changed
+	// Adjust fields when the product type is changed.
 	$( 'body' ).on( 'woocommerce-product-type-change',function(){
 		$.showHideNYPelements();
 	});
 
-	// adjust the fields when NYP status is changed
+	// Adjust the fields when NYP status is changed.
 	$( 'input#_nyp' ).on( 'change', function(){
 		$.showHideNYPelements();
 	});
 
-	// adjust the fields when variable billing period status is changed
+	// Adjust the fields when variable billing period status is changed.
 	$( '#_variable_billing' ).on( 'change', function(){
 		$.showHideNYPvariablePeriods( this.checked );
 		$.enableDisableSubscriptionPeriod( this.checked );
 	});
 
-	// WC 2.4 compat: handle variable products on load
+	// WC 2.4 compat: handle variable products on load.
 	$( '#woocommerce-product-data' ).on( 'woocommerce_variations_loaded', function(){
 		$.addClasstoVariablePrice();
 		$.moveNYPvariationFields();
 		$.showHideNYPvariableMeta();	
 	} );
-
-	// WC 2.3 compat: handle variable products on load
-	if($( '#variable_product_options .woocommerce_variation' ).length > 0) {
-		$.addClasstoVariablePrice();
-		$.moveNYPvariationFields();
-		$.showHideNYPvariableMeta();
-	}
 	
-	// When a variation is added
+	// When a variation is added.
 	$( '#variable_product_options' ).on( 'woocommerce_variations_added',function(){
 		$.addClasstoVariablePrice();
 		$.moveNYPvariationFields();
 		$.showHideNYPvariableMeta();
 	});
 
-	// hide/display variable nyp prices on single nyp checkbox change
+	// Hide/display variable nyp prices on single nyp checkbox change.
 	$( '#variable_product_options' ).on( 'change', '.variation_is_nyp', function(event){
 		$.showHideNYPvariableMeta();
 	});
 
-	// hide/display variable nyp prices on bulk nyp checkbox change
-	$( 'select#field_to_edit' ).on( 'woocommerce_variable_bulk_nyp_toggle', function(event){
+	// Hide/display variable nyp prices on bulk nyp checkbox change.
+	$( 'select.variation_actions' ).on( 'woocommerce_variable_bulk_nyp_toggle', function(event){
 		$.showHideNYPvariableMeta();
 	});
 
@@ -207,145 +221,36 @@
 	* Bulk Edit callbacks
 	*/
 
-	// toggle all variations to NYP
-	$( 'select#field_to_edit' ).on( 'toggle_nyp', function(){
-		var checkbox = $( 'input[name^="variation_is_nyp"]' );
-		checkbox.attr( 'checked', !checkbox.attr( 'checked' ));
-		$( 'select#field_to_edit' ).trigger( 'woocommerce_variable_bulk_nyp_toggle' );
-	});
+	// WC 2.4+ variation bulk edit handling.
+	$( 'select.variation_actions' ).on( 'variation_suggested_price_ajax_data variation_suggested_price_increase_ajax_data variation_suggested_price_decrease_ajax_data variation_min_price_ajax_data variation_min_price_increase_ajax_data variation_min_price_decrease_ajax_data', function(event, data) {
+		
+		variation_action = event.type.replace(/_ajax_data/g,'');
 
-	// set all suggestd prices
-	$( 'select#field_to_edit' ).on( 'variable_suggested_price', function(){
+		switch( variation_action ) {
+			case 'variation_suggested_price':
+			case 'variation_min_price':
+				value = window.prompt( woocommerce_nyp_metabox.enter_value );
+				// unformat
+				value = accounting.unformat( value, woocommerce_admin.mon_decimal_point );
+				break;
+			case 'variation_suggested_price_increase':
+			case 'variation_suggested_price_decrease':
+			case 'variation_min_price_increase':
+			case 'variation_min_price_decrease':
+				value = window.prompt( woocommerce_nyp_metabox.price_adjust );
 
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
+				// Is it a percentage change?
+				data.percentage = value.indexOf("%") >= 0 ? 'yes' : 'no';
 
-		var value = prompt(woocommerce_nyp_metabox.enter_value);
-		$(input_tag + '[name^="' + field_to_edit + '["]' ).val( value ).change();
+				// Unformat.
+				value = accounting.unformat( value, woocommerce_admin.mon_decimal_point );
 
-	});
+		}
 
-	// increase all suggested prices
-	$( 'select#field_to_edit' ).on( 'variable_suggested_price_increase', function(){
-		field_to_edit = 'variable_suggested_price';
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.price_adjust);
-		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
-		var current_value = $(this).val();
-
-			if ( value.indexOf("%") >= 0 ) {
-				var new_value = Number( current_value ) + ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
-			} else {
-				var new_value = Number( current_value ) + Number ( value );
-			}
-			$(this).val( new_value ).change();
-		});
-	});
-
-	// decrease all suggested prices
-	$( 'select#field_to_edit' ).on( 'variable_suggested_price_decrease', function(){
-		field_to_edit = 'variable_suggested_price';
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.price_adjust);
-		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
-			var current_value = $(this).val();
-
-			if ( value.indexOf("%") >= 0 ) {
-				var new_value = Number( current_value ) - ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
-			} else {
-				var new_value = Number( current_value ) - Number ( value );
-			}
-			$(this).val( new_value ).change();
-		});
-	});
-
-	// set all minimum prices
-	$( 'select#field_to_edit' ).on( 'variable_minimum_price', function(){
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.enter_value);
-		$(input_tag + '[name^="' + field_to_edit + '["]' ).val( value ).change();
-	});
-
-	// set all maximum prices
-	$( 'select#field_to_edit' ).on( 'variable_maximum_price', function(){
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.enter_value);
-		$(input_tag + '[name^="' + field_to_edit + '["]' ).val( value ).change();
-	});
-
-	// increase all minimum prices
-	$( 'select#field_to_edit' ).on( 'variable_minimum_price_increase', function(){
-		field_to_edit = 'variable_minimum_price';
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.price_adjust);
-		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
-			var current_value = $(this).val();
-
-			if ( value.indexOf("%") >= 0 ) {
-				var new_value = Number( current_value ) + ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
-			} else {
-				var new_value = Number( current_value ) + Number ( value );
-			}
-			$(this).val( new_value ).change();
-		});
-	});
-
-	// decrease all minimu prices
-	$( 'select#field_to_edit' ).on( 'variable_minimum_price_decrease', function(){
-		field_to_edit = 'variable_minimum_price';
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.price_adjust);
-		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
-			var current_value = $(this).val();
-
-			if ( value.indexOf("%") >= 0 ) {
-				var new_value = Number( current_value ) - ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
-			} else {
-				var new_value = Number( current_value ) - Number ( value );
-			}
-			$(this).val( new_value ).change();
-		});
-	});
-
-	// increase all maximum prices
-	$( 'select#field_to_edit' ).on( 'variable_maximum_price_increase', function(){
-		field_to_edit = 'variable_maximum_price';
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.price_adjust);
-		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
-			var current_value = $(this).val();
-
-			if ( value.indexOf("%") >= 0 ) {
-				var new_value = Number( current_value ) + ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
-			} else {
-				var new_value = Number( current_value ) + Number ( value );
-			}
-			$(this).val( new_value ).change();
-		});
-	});
-
-	// decrease all maximum prices
-	$( 'select#field_to_edit' ).on( 'variable_maximum_price_decrease', function(){
-		field_to_edit = 'variable_maximum_price';
-		var input_tag = $( 'select#field_to_edit :selected' ).attr( 'rel' ) ? $( 'select#field_to_edit :selected' ).attr( 'rel' ) : 'input';
-
-		var value = prompt(woocommerce_nyp_metabox.price_adjust);
-		$(input_tag + '[name^="' + field_to_edit + '"]' ).each(function() {
-			var current_value = $(this).val();
-
-			if ( value.indexOf("%") >= 0 ) {
-				var new_value = Number( current_value ) - ( ( Number( current_value ) / 100 ) * Number( value.replace(/\%/, "" ) ) );
-			} else {
-				var new_value = Number( current_value ) - Number ( value );
-			}
-			$(this).val( new_value ).change();
-		});
+		if ( value != null ) {
+			data.value = value;
+		}
+		return data;
 	});
 
 })(jQuery); //end
